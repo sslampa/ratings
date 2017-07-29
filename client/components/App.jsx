@@ -7,8 +7,8 @@ export default class App extends React.Component {
     this.add = this.add.bind(this);
   }
 
-  add(e) {
-    this.setState({count: this.state.count += 1})
+  add() {
+    this.setState({count: this.state.count += 1});
   }
   render() {
     return (
@@ -17,6 +17,6 @@ export default class App extends React.Component {
         <p>Count is {this.state.count}</p>
         <button onClick={this.add}>Click me</button>
       </div>
-    )
+    );
   }
 }
