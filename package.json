@@ -4,7 +4,7 @@
   "description": "Where users' rate movies, tv shows, and books.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha --recursive test/client/ --compilers js:babel-core/register",
     "bundle": "webpack --progress",
     "watch": "webpack --watch",
     "selenium-setup": "selenium-standalone install",
@@ -36,6 +36,7 @@
     "enzyme": "^2.9.1",
     "eslint": "^4.3.0",
     "eslint-plugin-react": "^7.1.0",
+    "jsdom": "^11.1.0",
     "mocha": "^3.5.0",
     "react-test-renderer": "^15.6.1",
     "selenium": "^2.20.0",
