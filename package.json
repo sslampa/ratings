@@ -39,6 +39,7 @@
     "mocha": "^3.5.0",
     "react-test-renderer": "^15.6.1",
     "selenium": "^2.20.0",
+    "selenium-standalone": "^6.6.0",
     "standalone": "0.0.1",
     "wdio-dot-reporter": "0.0.8",
     "wdio-mocha-framework": "^0.5.10",
