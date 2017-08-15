@@ -4,7 +4,7 @@
   "description": "Where users' rate movies, tv shows, and books.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --recursive test/client/ --compilers js:babel-core/register || true",
+    "test": "mocha --recursive test/client/ --compilers js:babel-core/register -r jsdom-global/register || true",
     "bundle": "webpack --progress",
     "watch": "webpack --watch",
     "selenium-setup": "selenium-standalone install",
@@ -38,6 +38,7 @@
     "eslint": "^4.3.0",
     "eslint-plugin-react": "^7.1.0",
     "jsdom": "^11.1.0",
+    "jsdom-global": "^3.0.2",
     "mocha": "^3.5.0",
     "react-test-renderer": "^15.6.1",
     "selenium": "^2.20.0",

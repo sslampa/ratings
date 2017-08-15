@@ -1,7 +1,7 @@
 import chai from 'chai';
 import React from 'react';
-import {App} from '../../client/components/App'
-import {shallow} from  'enzyme';
+import {App} from '../../client/components/App';
+import {shallow, mount} from  'enzyme';
 
 let expect = chai.expect;
 
@@ -10,4 +10,8 @@ describe('<App />',  () => {
     const component = shallow(<App />);
     expect(component.exists()).equal(true);
   });
+
+  it('calls componentDidMount', () => {
+    const component = mount(<App />);
+  })
 })
