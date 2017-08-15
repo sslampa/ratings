@@ -11,12 +11,11 @@ export class List extends React.Component {
 
   itemPanel = (item) => {
     return (
-      <div className='list-item' key='id'>
+      <div className='list-item' key={item.id}>
         <div className='list-item-header'>
-          <h1>{item.title}</h1>
+          <h3>{item.title} - {item.year}</h3>
         </div>
         <div className='list-item-body'>
-          <p>{item.year}</p>
           <p>{item.desc}</p>
         </div>
       </div>
