@@ -5,11 +5,16 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	_ "github.com/lib/pq"
+	"github.com/sslampa/ratings/server/models"
 )
 
 func main() {
 	port := flag.String("port", "8080", "Port to serve on")
 	flag.Parse()
+
+	models.Initialize()
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Hello World")
