@@ -1,6 +1,7 @@
 import chai from 'chai';
 import React from 'react';
 import {App} from '../../client/components/App';
+import {List} from '../../client/components/List';
 import {shallow, mount} from  'enzyme';
 
 let expect = chai.expect;
@@ -11,7 +12,8 @@ describe('<App />',  () => {
     expect(component.exists()).equal(true);
   });
 
-  it('calls componentDidMount', () => {
+  it('contains <List /> component', () => {
     const component = mount(<App />);
+    expect(component.find(List)).to.have.length(1);
   })
 })
