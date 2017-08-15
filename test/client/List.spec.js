@@ -4,15 +4,6 @@ import {List} from '../../client/components/List'
 import {shallow} from  'enzyme';
 let expect = chai.expect;
 
-const item = [
-  {
-    id: 1,
-    title: 'Louie',
-    year: '2009',
-    desc: 'A comedy show'
-  }
-]
-
 const items = [
   {
     id: 1,
@@ -30,12 +21,12 @@ const items = [
 
 describe('<List />',  () => {
   it('renders', () => {
-    const component = shallow(<List items={item}/>);
+    const component = shallow(<List items={items}/>);
     expect(component.exists()).equal(true);
   });
 
   it('renders one item', () => {
-    const component = shallow(<List items={item}/>);
+    const component = shallow(<List items={[items[0]]}/>);
     expect(component.find('.list-item')).to.have.length(1);
   });
 
