@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"log"
 	"os"
+
+	// For testing purposes
+	_ "github.com/lib/pq"
 )
 
 // Initialize initializes database for REST API
