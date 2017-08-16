@@ -8,10 +8,10 @@ import (
 )
 
 // Initialize initializes database for REST API
-func Initialize() {
+func Initialize(dbName string) {
 	dbUser := os.Getenv("DB_USER")
 	dbPass := os.Getenv("DB_PASS")
-	dbInfo := fmt.Sprintf("user=%s password=%s dbname=ratings_app", dbUser, dbPass)
+	dbInfo := fmt.Sprintf("user=%s password=%s dbname=%s", dbUser, dbPass, dbName)
 
 	DB, err := sql.Open("postgres", dbInfo)
 	if err != nil {
