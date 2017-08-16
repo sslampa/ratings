@@ -8,7 +8,7 @@ import (
 )
 
 // Initialize initializes database for REST API
-func Initialize(dbName string) {
+func Initialize(dbName string) *sql.DB {
 	dbUser := os.Getenv("DB_USER")
 	dbPass := os.Getenv("DB_PASS")
 	dbInfo := fmt.Sprintf("user=%s password=%s dbname=%s", dbUser, dbPass, dbName)
@@ -23,4 +23,6 @@ func Initialize(dbName string) {
 	}
 
 	fmt.Println("You connected to your database")
+
+	return DB
 }
