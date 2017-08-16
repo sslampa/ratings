@@ -14,7 +14,7 @@ func main() {
 	port := flag.String("port", "8080", "Port to serve on")
 	flag.Parse()
 
-	models.Initialize()
+	models.Initialize("ratings_app")
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Hello World")
