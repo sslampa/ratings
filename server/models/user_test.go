@@ -1,6 +1,7 @@
 package models
 
 import (
+	"database/sql"
 	"log"
 	"testing"
 )
@@ -8,6 +9,10 @@ import (
 func UserTest(t *testing.T) {
 	db := Initialize("ratings_app_test")
 
+	createUserTable(db)
+}
+
+func createUserTable(db *sql.DB) {
 	const tableQuery = `CREATE TABLE IF NOT EXISTS users
   (
     id SERIAL PRIMARY KEY,
