@@ -37,6 +37,10 @@ func GetUser(c, v string, db *sql.DB) (User, error) {
 		}
 	}
 
+	if (User{}) == u {
+		return u, errors.New("No user found")
+	}
+
 	return u, nil
 }
 

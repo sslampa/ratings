@@ -22,10 +22,10 @@ func TestUserID(t *testing.T) {
 
 	userComp(t, expect, user)
 
-	// _, err = GetUser("id", "3000", db)
-	// if err == nil {
-	// 	t.Errorf("Expected a fail for empty return")
-	// }
+	_, err = GetUser("id", "3000", db)
+	if err == nil {
+		t.Errorf("Expected a fail for empty return")
+	}
 
 	_, err = GetUser("something", "3000", db)
 	if err == nil {
