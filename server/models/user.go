@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"log"
+	"strconv"
 )
 
 // User fields
@@ -47,17 +48,17 @@ func GetUser(c, v string, db *sql.DB) (User, error) {
 // PostUser returns the user
 func PostUser(un string, db *sql.DB) (User, error) {
 	u := User{}
-	postQuery := `INSERT INTO users (username) VALUES ($1)`
-	rows, err := db.Query(postQuery, un)
+	id := 0
+
+	postQuery := "INSERT INTO users (username) VALUES ($1) RETURNING id"
+	err := db.QueryRow(postQuery, un).Scan(&id)
 	if err != nil {
 		return u, err
 	}
 
-	for rows.Next() {
-		err = rows.Scan(&u.ID, &u.Username)
-		if err != nil {
-			return u, err
-		}
+	u, err = GetUser("id", strconv.Itoa(int(id)), db)
+	if err != nil {
+		return u, err
 	}
 
 	return u, nil

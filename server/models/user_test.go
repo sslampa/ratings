@@ -2,6 +2,7 @@ package models
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"testing"
 )
@@ -11,6 +12,7 @@ var db *sql.DB
 func init() {
 	db = Initialize("ratings_app_test")
 	createUserTable(db)
+	SeedUsers(db)
 }
 
 func TestUserID(t *testing.T) {
@@ -44,16 +46,11 @@ func TestUserUsername(t *testing.T) {
 	userComp(t, expect, user)
 }
 
-func TestUserAdd(t *testing.T) {
+func TestUserPost(t *testing.T) {
 	expect := User{"4", "cmfasulo"}
-	_, err := PostUser("cmfasulo", db)
+	user, err := PostUser("cmfasulo", db)
 	if err != nil {
-		log.Fatal(err)
-	}
-
-	user, err := GetUser("username", "cmfasulo", db)
-	if err != nil {
-		log.Fatal(err)
+		t.Errorf("Expected query to return a user")
 	}
 
 	userComp(t, expect, user)
@@ -70,6 +67,7 @@ func createUserTable(db *sql.DB) {
 	if _, err := db.Exec(dropQuery); err != nil {
 		log.Fatal(err)
 	}
+	fmt.Println("User table dropped")
 
 	const tableQuery = `CREATE TABLE IF NOT EXISTS users
   (
@@ -80,8 +78,7 @@ func createUserTable(db *sql.DB) {
 	if _, err := db.Exec(tableQuery); err != nil {
 		log.Fatal(err)
 	}
-
-	SeedUsers(db)
+	fmt.Println("User table created")
 }
 
 func userComp(t *testing.T, expected, actual User) {
