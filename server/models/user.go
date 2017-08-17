@@ -14,15 +14,15 @@ type User struct {
 // GetUser returns the user
 func GetUser(c, v string, db *sql.DB) (User, error) {
 	u := User{}
-	var uQuery string
+	var getQuery string
 	switch c {
 	case "username":
-		uQuery = `SELECT * FROM users WHERE username = $1`
+		getQuery = `SELECT * FROM users WHERE username = $1`
 	case "id":
-		uQuery = `SELECT * FROM users WHERE id = $1`
+		getQuery = `SELECT * FROM users WHERE id = $1`
 	}
 
-	rows, err := db.Query(uQuery, v)
+	rows, err := db.Query(getQuery, v)
 	if err != nil {
 		log.Fatal(err)
 	}
