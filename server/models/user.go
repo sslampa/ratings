@@ -3,7 +3,7 @@ package models
 import (
 	"database/sql"
 	"errors"
-	"log"
+	"fmt"
 	"strconv"
 )
 
@@ -19,27 +19,16 @@ func GetUser(c, v string, db *sql.DB) (User, error) {
 	var getQuery string
 	switch c {
 	case "username":
-		getQuery = `SELECT * FROM users WHERE username = $1`
+		getQuery = "SELECT * FROM users WHERE username = $1"
 	case "id":
-		getQuery = `SELECT * FROM users WHERE id = $1`
+		getQuery = "SELECT * FROM users WHERE id = $1"
 	default:
 		return u, errors.New("Entered incorrect value for query case")
 	}
 
-	rows, err := db.Query(getQuery, v)
+	err := db.QueryRow(getQuery, v).Scan(&u.ID, &u.Username)
 	if err != nil {
-		log.Fatal(err)
-	}
-
-	for rows.Next() {
-		err = rows.Scan(&u.ID, &u.Username)
-		if err != nil {
-			return u, err
-		}
-	}
-
-	if (User{}) == u {
-		return u, errors.New("No user found")
+		return u, fmt.Errorf("No user found with %v %v", c, v)
 	}
 
 	return u, nil
