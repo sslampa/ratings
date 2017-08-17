@@ -14,39 +14,27 @@ func init() {
 }
 
 func TestUserID(t *testing.T) {
-	uExpect := User{"1", "sslampa"}
+	expect := User{"1", "sslampa"}
 	user, err := GetUser("id", "1", db)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	if uExpect.ID != user.ID {
-		t.Errorf("User ID %v does not match expected ID %v", user.ID, uExpect.ID)
-	}
-
-	if uExpect.Username != user.Username {
-		t.Errorf("Username %v does not match expected username %v", user.Username, uExpect.Username)
-	}
+	userComp(t, expect, user)
 }
 
 func TestUserUsername(t *testing.T) {
-	uExpect := User{"1", "sslampa"}
+	expect := User{"1", "sslampa"}
 	user, err := GetUser("username", "sslampa", db)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	if uExpect.ID != user.ID {
-		t.Errorf("User ID %v does not match expected ID %v", user.ID, uExpect.ID)
-	}
-
-	if uExpect.Username != user.Username {
-		t.Errorf("Username %v does not match expected username %v", user.Username, uExpect.Username)
-	}
+	userComp(t, expect, user)
 }
 
 func TestUserAdd(t *testing.T) {
-	uExpect := User{"2", "tomanistor"}
+	expect := User{"2", "tomanistor"}
 	_, err := PostUser("tomanistor", db)
 	if err != nil {
 		log.Fatal(err)
@@ -57,17 +45,11 @@ func TestUserAdd(t *testing.T) {
 		log.Fatal(err)
 	}
 
-	if uExpect.ID != user.ID {
-		t.Errorf("User ID %v does not match expected ID %v", user.ID, uExpect.ID)
-	}
-
-	if uExpect.Username != user.Username {
-		t.Errorf("Username %v does not match expected username %v", user.Username, uExpect.Username)
-	}
+	userComp(t, expect, user)
 
 	_, err = PostUser("tomanistor", db)
 	if err == nil {
-		t.Errorf("Username %v should not be the same as %v", user.Username, uExpect.Username)
+		t.Errorf("Username %v should not be the same as %v", user.Username, expect.Username)
 	}
 
 }
@@ -91,5 +73,15 @@ func createUserTable(db *sql.DB) {
 	const seedQuery = `INSERT INTO users (username) VALUES ($1)`
 	if _, err := db.Exec(seedQuery, "sslampa"); err != nil {
 		log.Fatal(err)
+	}
+}
+
+func userComp(t *testing.T, expected, actual User) {
+	if expected.ID != actual.ID {
+		t.Errorf("User ID %v does not match expected ID %v", actual.ID, expected.ID)
+	}
+
+	if expected.Username != actual.Username {
+		t.Errorf("Username %v should not match expected username %v", actual.Username, expected.Username)
 	}
 }
