@@ -45,6 +45,33 @@ func TestUserUsername(t *testing.T) {
 	}
 }
 
+func TestUserAdd(t *testing.T) {
+	uExpect := User{"2", "tomanistor"}
+	_, err := PostUser("tomanistor", db)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	user, err := GetUser("username", "tomanistor", db)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if uExpect.ID != user.ID {
+		t.Errorf("User ID %v does not match expected ID %v", user.ID, uExpect.ID)
+	}
+
+	if uExpect.Username != user.Username {
+		t.Errorf("Username %v does not match expected username %v", user.Username, uExpect.Username)
+	}
+
+	_, err = PostUser("tomanistor", db)
+	if err == nil {
+		t.Errorf("Username %v should not be the same as %v", user.Username, uExpect.Username)
+	}
+
+}
+
 func createUserTable(db *sql.DB) {
 	const dropQuery = `DROP TABLE users`
 	if _, err := db.Exec(dropQuery); err != nil {
