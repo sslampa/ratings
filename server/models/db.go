@@ -35,13 +35,13 @@ func SeedUsers(db *sql.DB) {
 	u1 := User{Username: "sslampa"}
 	u2 := User{Username: "tomanistor"}
 	u3 := User{Username: "suzmas"}
-	users := [3]User{u1, u2, u3}
+	users := []User{u1, u2, u3}
 
-	insertQuery := `INSERT INTO users (username) VALUES ($1)`
 	for _, u := range users {
-		_, err := db.Exec(insertQuery, u.Username)
+		_, err := PostUser(u.Username, db)
 		if err != nil {
 			log.Fatal(err)
 		}
 	}
+	fmt.Println("User seed created")
 }
