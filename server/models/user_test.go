@@ -34,20 +34,20 @@ func TestUserUsername(t *testing.T) {
 }
 
 func TestUserAdd(t *testing.T) {
-	expect := User{"2", "tomanistor"}
-	_, err := PostUser("tomanistor", db)
+	expect := User{"4", "cmfasulo"}
+	_, err := PostUser("cmfasulo", db)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	user, err := GetUser("username", "tomanistor", db)
+	user, err := GetUser("username", "cmfasulo", db)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	userComp(t, expect, user)
 
-	_, err = PostUser("tomanistor", db)
+	_, err = PostUser("cmfasulo", db)
 	if err == nil {
 		t.Errorf("Username %v should not be the same as %v", user.Username, expect.Username)
 	}
@@ -70,10 +70,7 @@ func createUserTable(db *sql.DB) {
 		log.Fatal(err)
 	}
 
-	const seedQuery = `INSERT INTO users (username) VALUES ($1)`
-	if _, err := db.Exec(seedQuery, "sslampa"); err != nil {
-		log.Fatal(err)
-	}
+	SeedUsers(db)
 }
 
 func userComp(t *testing.T, expected, actual User) {
