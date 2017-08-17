@@ -10,12 +10,10 @@ var db *sql.DB
 
 func init() {
 	db = Initialize("ratings_app_test")
+	createUserTable(db)
 }
 
 func TestUserID(t *testing.T) {
-	// db := Initialize("ratings_app_test")
-
-	createUserTable(db)
 	uExpect := User{"1", "sslampa"}
 	user, err := GetUser("id", "1", db)
 	if err != nil {
@@ -32,7 +30,6 @@ func TestUserID(t *testing.T) {
 }
 
 func TestUserUsername(t *testing.T) {
-	createUserTable(db)
 	uExpect := User{"1", "sslampa"}
 	user, err := GetUser("username", "sslampa", db)
 	if err != nil {
@@ -49,6 +46,11 @@ func TestUserUsername(t *testing.T) {
 }
 
 func createUserTable(db *sql.DB) {
+	const dropQuery = `DROP TABLE users`
+	if _, err := db.Exec(dropQuery); err != nil {
+		log.Fatal(err)
+	}
+
 	const tableQuery = `CREATE TABLE IF NOT EXISTS users
   (
     id SERIAL PRIMARY KEY,
@@ -56,6 +58,11 @@ func createUserTable(db *sql.DB) {
   )`
 
 	if _, err := db.Exec(tableQuery); err != nil {
+		log.Fatal(err)
+	}
+
+	const seedQuery = `INSERT INTO users (username) VALUES ($1)`
+	if _, err := db.Exec(seedQuery, "sslampa"); err != nil {
 		log.Fatal(err)
 	}
 }
