@@ -1,5 +1,8 @@
 package handlers
 
-function UserHandler(w http.ResponseWriter, r *http.Request) {
-  
+import "net/http"
+
+// UserHandler Returns Handler
+func UserHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
 }
