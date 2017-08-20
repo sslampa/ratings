@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func UserTest(t *testing.T) {
+func TestGetUser(t *testing.T) {
 	req, err := http.NewRequest("GET", "/user", nil)
 	if err != nil {
 		t.Fatal(err)
