@@ -10,35 +10,36 @@ import (
 	_ "github.com/lib/pq"
 )
 
+var db *sql.DB
+
 // Initialize initializes database for REST API
-func Initialize(dbName string) *sql.DB {
+func Initialize(dbName string) {
 	dbUser := os.Getenv("DB_USER")
 	dbPass := os.Getenv("DB_PASS")
 	dbInfo := fmt.Sprintf("user=%s password=%s dbname=%s", dbUser, dbPass, dbName)
 
-	DB, err := sql.Open("postgres", dbInfo)
+	var err error
+	db, err = sql.Open("postgres", dbInfo)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	if err = DB.Ping(); err != nil {
+	if err = db.Ping(); err != nil {
 		log.Fatal(err)
 	}
 
 	fmt.Println("You connected to your database")
-
-	return DB
 }
 
 // SeedUsers seeds users table
-func SeedUsers(db *sql.DB) {
+func SeedUsers() {
 	u1 := User{Username: "sslampa"}
 	u2 := User{Username: "tomanistor"}
 	u3 := User{Username: "suzmas"}
 	users := []User{u1, u2, u3}
 
 	for _, u := range users {
-		_, err := PostUser(u.Username, db)
+		_, err := PostUser(u.Username)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -47,7 +48,7 @@ func SeedUsers(db *sql.DB) {
 }
 
 // CreateUserTable creates user table
-func CreateUserTable(db *sql.DB) {
+func CreateUserTable() {
 	const dropQuery = `DROP TABLE users`
 	if _, err := db.Exec(dropQuery); err != nil {
 		log.Fatal(err)

@@ -1,7 +1,6 @@
 package models
 
 import (
-	"database/sql"
 	"errors"
 	"fmt"
 	"strconv"
@@ -14,7 +13,7 @@ type User struct {
 }
 
 // GetUsers returns all users
-func GetUsers(db *sql.DB) ([]User, error) {
+func GetUsers() ([]User, error) {
 	var users []User
 
 	getQuery := "SELECT * FROM users"
@@ -36,7 +35,7 @@ func GetUsers(db *sql.DB) ([]User, error) {
 }
 
 // GetUser returns the user
-func GetUser(c, v string, db *sql.DB) (User, error) {
+func GetUser(c, v string) (User, error) {
 	u := User{}
 	var getQuery string
 	switch c {
@@ -57,7 +56,7 @@ func GetUser(c, v string, db *sql.DB) (User, error) {
 }
 
 // PostUser returns the user
-func PostUser(un string, db *sql.DB) (User, error) {
+func PostUser(un string) (User, error) {
 	u := User{}
 	id := 0
 
@@ -67,7 +66,7 @@ func PostUser(un string, db *sql.DB) (User, error) {
 		return u, err
 	}
 
-	u, err = GetUser("id", strconv.Itoa(int(id)), db)
+	u, err = GetUser("id", strconv.Itoa(int(id)))
 	if err != nil {
 		return u, err
 	}

@@ -1,17 +1,14 @@
 package models
 
 import (
-	"database/sql"
 	"log"
 	"testing"
 )
 
-var db *sql.DB
-
 func init() {
-	db = Initialize("ratings_app_test")
-	CreateUserTable(db)
-	SeedUsers(db)
+	Initialize("ratings_app_test")
+	CreateUserTable()
+	SeedUsers()
 }
 
 func TestAllUsers(t *testing.T) {
@@ -30,7 +27,7 @@ func TestAllUsers(t *testing.T) {
 		},
 	}
 
-	actual, err := GetUsers(db)
+	actual, err := GetUsers()
 	if err != nil {
 		t.Error(err)
 	}
@@ -47,19 +44,19 @@ func TestAllUsers(t *testing.T) {
 
 func TestUserID(t *testing.T) {
 	expect := User{"1", "sslampa"}
-	user, err := GetUser("id", "1", db)
+	user, err := GetUser("id", "1")
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	userComp(t, expect, user)
 
-	_, err = GetUser("id", "3000", db)
+	_, err = GetUser("id", "3000")
 	if err == nil {
 		t.Errorf("Expected to find no user")
 	}
 
-	_, err = GetUser("something", "1", db)
+	_, err = GetUser("something", "1")
 	if err == nil {
 		t.Errorf("Expected to find no user")
 	}
@@ -67,7 +64,7 @@ func TestUserID(t *testing.T) {
 
 func TestUserUsername(t *testing.T) {
 	expect := User{"1", "sslampa"}
-	user, err := GetUser("username", "sslampa", db)
+	user, err := GetUser("username", "sslampa")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -77,14 +74,14 @@ func TestUserUsername(t *testing.T) {
 
 func TestUserPost(t *testing.T) {
 	expect := User{"4", "cmfasulo"}
-	user, err := PostUser("cmfasulo", db)
+	user, err := PostUser("cmfasulo")
 	if err != nil {
 		t.Errorf("Expected query to return a user")
 	}
 
 	userComp(t, expect, user)
 
-	_, err = PostUser("cmfasulo", db)
+	_, err = PostUser("cmfasulo")
 	if err == nil {
 		t.Errorf("Expected username %v to not equal %v", user.Username, expect.Username)
 	}
