@@ -1,35 +1,62 @@
 package models
 
 import (
-	"database/sql"
-	"fmt"
 	"log"
 	"testing"
 )
 
-var db *sql.DB
-
 func init() {
-	db = Initialize("ratings_app_test")
-	createUserTable(db)
-	SeedUsers(db)
+	Initialize("ratings_app_test")
+	CreateUserTable()
+	SeedUsers()
+}
+
+func TestAllUsers(t *testing.T) {
+	expect := []User{
+		{
+			ID:       "1",
+			Username: "sslampa",
+		},
+		{
+			ID:       "2",
+			Username: "tomanistor",
+		},
+		{
+			ID:       "3",
+			Username: "suzmas",
+		},
+	}
+
+	actual, err := GetUsers()
+	if err != nil {
+		t.Error(err)
+	}
+
+	if len(actual) != len(expect) {
+		t.Errorf("Expected %v to equal %v", len(actual), len(expect))
+	}
+
+	for i, a := range actual {
+		userComp(t, expect[i], a)
+	}
+
 }
 
 func TestUserID(t *testing.T) {
 	expect := User{"1", "sslampa"}
-	user, err := GetUser("id", "1", db)
+	user, err := GetUser("id", "1")
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	userComp(t, expect, user)
 
-	_, err = GetUser("id", "3000", db)
+	_, err = GetUser("id", "3000")
 	if err == nil {
 		t.Errorf("Expected to find no user")
 	}
 
-	_, err = GetUser("something", "1", db)
+	_, err = GetUser("something", "1")
 	if err == nil {
 		t.Errorf("Expected to find no user")
 	}
@@ -37,7 +64,7 @@ func TestUserID(t *testing.T) {
 
 func TestUserUsername(t *testing.T) {
 	expect := User{"1", "sslampa"}
-	user, err := GetUser("username", "sslampa", db)
+	user, err := GetUser("username", "sslampa")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -47,35 +74,18 @@ func TestUserUsername(t *testing.T) {
 
 func TestUserPost(t *testing.T) {
 	expect := User{"4", "cmfasulo"}
-	user, err := PostUser("cmfasulo", db)
+	user, err := PostUser("cmfasulo")
 	if err != nil {
 		t.Errorf("Expected query to return a user")
 	}
 
 	userComp(t, expect, user)
 
-	_, err = PostUser("cmfasulo", db)
+	_, err = PostUser("cmfasulo")
 	if err == nil {
 		t.Errorf("Expected username %v to not equal %v", user.Username, expect.Username)
 	}
 
-}
-
-func createUserTable(db *sql.DB) {
-	const dropQuery = `DROP TABLE users`
-	if _, err := db.Exec(dropQuery); err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("User table dropped")
-
-	const tableQuery = `CREATE TABLE IF NOT EXISTS users (
-    id SERIAL PRIMARY KEY,
-    username VARCHAR UNIQUE)`
-
-	if _, err := db.Exec(tableQuery); err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("User table created")
 }
 
 func userComp(t *testing.T, expected, actual User) {

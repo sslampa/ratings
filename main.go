@@ -17,10 +17,10 @@ func main() {
 
 	models.Initialize("ratings_app")
 
+	http.HandleFunc("/users", handlers.UsersHandler)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Hello World")
 	})
-	http.HandleFunc("/user", handlers.UserHandler)
 
 	log.Printf("Serving on HTTP port: %s\n", *port)
 	err := http.ListenAndServe(":"+*port, nil)
