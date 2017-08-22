@@ -9,8 +9,30 @@ import (
 
 // User fields
 type User struct {
-	ID       string
-	Username string
+	ID       string `json:"id"`
+	Username string `json:"username"`
+}
+
+// GetUsers returns all users
+func GetUsers(db *sql.DB) ([]User, error) {
+	var users []User
+
+	getQuery := "SELECT * FROM users"
+	rows, err := db.Query(getQuery)
+	if err != nil {
+		return users, err
+	}
+
+	for rows.Next() {
+		u := User{}
+		err = rows.Scan(&u.ID, &u.Username)
+		if err != nil {
+			return users, err
+		}
+		users = append(users, u)
+	}
+
+	return users, nil
 }
 
 // GetUser returns the user

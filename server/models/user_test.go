@@ -14,6 +14,37 @@ func init() {
 	SeedUsers(db)
 }
 
+func TestAllUsers(t *testing.T) {
+	expect := []User{
+		{
+			ID:       "1",
+			Username: "sslampa",
+		},
+		{
+			ID:       "2",
+			Username: "tomanistor",
+		},
+		{
+			ID:       "3",
+			Username: "suzmas",
+		},
+	}
+
+	actual, err := GetUsers(db)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if len(actual) != len(expect) {
+		t.Errorf("Expected %v to equal %v", len(actual), len(expect))
+	}
+
+	for i, a := range actual {
+		userComp(t, expect[i], a)
+	}
+
+}
+
 func TestUserID(t *testing.T) {
 	expect := User{"1", "sslampa"}
 	user, err := GetUser("id", "1", db)
