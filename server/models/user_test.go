@@ -2,7 +2,6 @@ package models
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"testing"
 )
@@ -11,7 +10,7 @@ var db *sql.DB
 
 func init() {
 	db = Initialize("ratings_app_test")
-	createUserTable(db)
+	CreateUserTable(db)
 	SeedUsers(db)
 }
 
@@ -59,23 +58,6 @@ func TestUserPost(t *testing.T) {
 		t.Errorf("Expected username %v to not equal %v", user.Username, expect.Username)
 	}
 
-}
-
-func createUserTable(db *sql.DB) {
-	const dropQuery = `DROP TABLE users`
-	if _, err := db.Exec(dropQuery); err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("User table dropped")
-
-	const tableQuery = `CREATE TABLE IF NOT EXISTS users (
-    id SERIAL PRIMARY KEY,
-    username VARCHAR UNIQUE)`
-
-	if _, err := db.Exec(tableQuery); err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("User table created")
 }
 
 func userComp(t *testing.T, expected, actual User) {

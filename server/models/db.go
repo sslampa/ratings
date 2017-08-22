@@ -45,3 +45,21 @@ func SeedUsers(db *sql.DB) {
 	}
 	fmt.Println("User seed created")
 }
+
+// CreateUserTable creates user table
+func CreateUserTable(db *sql.DB) {
+	const dropQuery = `DROP TABLE users`
+	if _, err := db.Exec(dropQuery); err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("User table dropped")
+
+	const tableQuery = `CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR UNIQUE)`
+
+	if _, err := db.Exec(tableQuery); err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("User table created")
+}

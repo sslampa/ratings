@@ -1,13 +1,24 @@
 package handlers
 
 import (
+	"database/sql"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/sslampa/ratings/server/models"
 )
 
+var db *sql.DB
+
+func init() {
+	db = models.Initialize("ratings_app_test")
+	models.CreateUserTable(db)
+	models.SeedUsers(db)
+}
+
 func TestGetUser(t *testing.T) {
-	req, err := http.NewRequest("GET", "/user", nil)
+	req, err := http.NewRequest("GET", "/users", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -18,6 +29,6 @@ func TestGetUser(t *testing.T) {
 	handler.ServeHTTP(rr, req)
 
 	if status := rr.Code; status != http.StatusOK {
-		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusOK)
+		t.Errorf("Expected status code %v, instead got %v", http.StatusOK, status)
 	}
 }
