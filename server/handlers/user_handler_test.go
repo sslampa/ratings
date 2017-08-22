@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"database/sql"
-	"fmt"
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -13,9 +13,9 @@ import (
 var db *sql.DB
 
 func init() {
-	db = models.Initialize("ratings_app_test")
-	models.CreateUserTable(db)
-	models.SeedUsers(db)
+	models.Initialize("ratings_app_test")
+	models.CreateUserTable()
+	models.SeedUsers()
 }
 
 func TestGetUsers(t *testing.T) {
@@ -25,7 +25,7 @@ func TestGetUsers(t *testing.T) {
 	}
 
 	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(UserHandler)
+	handler := http.HandlerFunc(UsersHandler)
 
 	handler.ServeHTTP(rr, req)
 
@@ -33,6 +33,9 @@ func TestGetUsers(t *testing.T) {
 		t.Errorf("Expected status code %v, instead got %v", http.StatusOK, status)
 	}
 
-	body := rr.Body.String()
-	fmt.Println("This", body)
+	users := make([]models.User, 0)
+	json.NewDecoder(rr.Body).Decode(&users)
+	if len(users) != 3 {
+		t.Errorf("Expected length to be 3")
+	}
 }

@@ -17,7 +17,7 @@ func main() {
 
 	models.Initialize("ratings_app")
 
-	http.HandleFunc("/users", handlers.UserHandler)
+	http.HandleFunc("/users", handlers.UsersHandler)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Hello World")
 	})
