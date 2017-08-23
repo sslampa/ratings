@@ -29,4 +29,6 @@ func Initialize(dbName string) {
 	}
 
 	fmt.Println("You connected to your database")
+
+	createUserTable()
 }

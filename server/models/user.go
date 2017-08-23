@@ -76,7 +76,7 @@ func PostUser(un string) (User, error) {
 }
 
 // SeedUsers seeds users table
-func SeedUsers() {
+func seedUsers() {
 	u1 := User{Username: "sslampa"}
 	u2 := User{Username: "tomanistor"}
 	u3 := User{Username: "suzmas"}
@@ -92,8 +92,8 @@ func SeedUsers() {
 }
 
 // CreateUserTable creates user table
-func CreateUserTable() {
-	const dropQuery = `DROP TABLE users`
+func createUserTable() {
+	const dropQuery = `DROP TABLE IF EXISTS users`
 	if _, err := db.Exec(dropQuery); err != nil {
 		log.Fatal(err)
 	}
