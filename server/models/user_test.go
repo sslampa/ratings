@@ -7,7 +7,7 @@ import (
 
 func init() {
 	Initialize("ratings_app_test")
-	seedUsers()
+	Seed()
 }
 
 func TestAllUsers(t *testing.T) {

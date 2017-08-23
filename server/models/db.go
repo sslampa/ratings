@@ -32,3 +32,8 @@ func Initialize(dbName string) {
 
 	createUserTable()
 }
+
+// Seed seeds all tables
+func Seed() {
+	seedUsers()
+}
