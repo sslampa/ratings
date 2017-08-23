@@ -29,11 +29,22 @@ func Initialize(dbName string) {
 	}
 
 	fmt.Println("You connected to your database")
-
+	Create()
 }
 
 // Seed seeds all tables
 func Seed() {
+	dropUserTable()
 	createUserTable()
 	seedUsers()
+}
+
+// Create creates all tables
+func Create() {
+	createUserTable()
+}
+
+// Drop drops all tables
+func Drop() {
+	dropUserTable()
 }

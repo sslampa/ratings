@@ -75,7 +75,6 @@ func PostUser(un string) (User, error) {
 	return u, nil
 }
 
-// SeedUsers seeds users table
 func seedUsers() {
 	u1 := User{Username: "sslampa"}
 	u2 := User{Username: "tomanistor"}
@@ -91,14 +90,7 @@ func seedUsers() {
 	fmt.Println("User seed created")
 }
 
-// CreateUserTable creates user table
 func createUserTable() {
-	const dropQuery = `DROP TABLE IF EXISTS users`
-	if _, err := db.Exec(dropQuery); err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("User table dropped")
-
 	const tableQuery = `CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     username VARCHAR UNIQUE)`
@@ -107,4 +99,12 @@ func createUserTable() {
 		log.Fatal(err)
 	}
 	fmt.Println("User table created")
+}
+
+func dropUserTable() {
+	const dropQuery = `DROP TABLE IF EXISTS users`
+	if _, err := db.Exec(dropQuery); err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("User table dropped")
 }
