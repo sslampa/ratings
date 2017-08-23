@@ -13,9 +13,13 @@ import (
 
 func main() {
 	port := flag.String("port", "8080", "Port to serve on")
+	seed := flag.Bool("seed", false, "Seed database")
 	flag.Parse()
 
 	models.Initialize("ratings_app")
+	if *seed {
+		models.Seed()
+	}
 
 	http.HandleFunc("/users", handlers.UsersHandler)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {

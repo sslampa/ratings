@@ -30,10 +30,10 @@ func Initialize(dbName string) {
 
 	fmt.Println("You connected to your database")
 
-	createUserTable()
 }
 
 // Seed seeds all tables
 func Seed() {
+	createUserTable()
 	seedUsers()
 }
