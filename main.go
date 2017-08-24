@@ -12,6 +12,20 @@ import (
 )
 
 func main() {
+	port := flags()
+	http.HandleFunc("/users", handlers.UsersHandler)
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Hello World")
+	})
+
+	log.Printf("Serving on HTTP port: %s\n", *port)
+	err := http.ListenAndServe(":"+*port, nil)
+	if err != nil {
+		log.Fatal("Listen and Serve: ", err)
+	}
+}
+
+func flags() *string {
 	port := flag.String("port", "8080", "Port to serve on")
 	seed := flag.Bool("seed", false, "Seed database")
 	drop := flag.Bool("drop", false, "Drop database")
@@ -27,14 +41,5 @@ func main() {
 		models.Drop()
 	}
 
-	http.HandleFunc("/users", handlers.UsersHandler)
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello World")
-	})
-
-	log.Printf("Serving on HTTP port: %s\n", *port)
-	err := http.ListenAndServe(":"+*port, nil)
-	if err != nil {
-		log.Fatal("Listen and Serve: ", err)
-	}
+	return port
 }
