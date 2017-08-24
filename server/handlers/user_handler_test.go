@@ -14,8 +14,7 @@ var db *sql.DB
 
 func init() {
 	models.Initialize("ratings_app_test")
-	models.CreateUserTable()
-	models.SeedUsers()
+	models.Seed()
 }
 
 func TestGetUsers(t *testing.T) {
@@ -37,5 +36,21 @@ func TestGetUsers(t *testing.T) {
 	json.NewDecoder(rr.Body).Decode(&users)
 	if len(users) != 3 {
 		t.Errorf("Expected length to be 3")
+	}
+}
+
+func TestPostUser(t *testing.T) {
+	req, err := http.NewRequest("POST", "/users/add?username=melky", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(PostUserHandler)
+
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusCreated {
+		t.Errorf("Expected status code %v, instead got %v", http.StatusCreated, status)
 	}
 }

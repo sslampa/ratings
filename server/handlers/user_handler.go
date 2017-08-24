@@ -19,3 +19,15 @@ func UsersHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(users)
 }
+
+// PostUserHandler returns handler
+func PostUserHandler(w http.ResponseWriter, r *http.Request) {
+	username := r.FormValue("username")
+
+	if username == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+}
