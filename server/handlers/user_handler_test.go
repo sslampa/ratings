@@ -54,3 +54,19 @@ func TestPostUser(t *testing.T) {
 		t.Errorf("Expected status code %v, instead got %v", http.StatusCreated, status)
 	}
 }
+
+func TestPostUserFail(t *testing.T) {
+	req, err := http.NewRequest("POST", "/users/add?username=", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(PostUserHandler)
+
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusBadRequest {
+		t.Errorf("Expected status code %v, instead got %v", http.StatusBadRequest, status)
+	}
+}
