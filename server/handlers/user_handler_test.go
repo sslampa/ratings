@@ -53,10 +53,32 @@ func TestPostUser(t *testing.T) {
 	if status := rr.Code; status != http.StatusCreated {
 		t.Errorf("Expected status code %v, instead got %v", http.StatusCreated, status)
 	}
+
+	var user models.User
+	json.NewDecoder(rr.Body).Decode(&user)
+	if user.Username != "melky" {
+		t.Errorf("Expected %v to equal melky", user.Username)
+	}
 }
 
-func TestPostUserFail(t *testing.T) {
+func TestPostUsernameEmpty(t *testing.T) {
 	req, err := http.NewRequest("POST", "/users/add?username=", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(PostUserHandler)
+
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusBadRequest {
+		t.Errorf("Expected status code %v, instead got %v", http.StatusBadRequest, status)
+	}
+}
+
+func TestPostUsernameSame(t *testing.T) {
+	req, err := http.NewRequest("POST", "/users/add?username=sslampa", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
