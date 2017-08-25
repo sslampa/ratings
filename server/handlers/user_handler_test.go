@@ -92,3 +92,27 @@ func TestPostUsernameSame(t *testing.T) {
 		t.Errorf("Expected status code %v, instead got %v", http.StatusBadRequest, status)
 	}
 }
+
+func TestDeleteUser(t *testing.T) {
+	req1, err := http.NewRequest("POST", "/users/add?username=mrobock", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	r1 := httptest.NewRecorder()
+	handler := http.HandlerFunc(PostUserHandler)
+
+	handler.ServeHTTP(r1, req1)
+
+	req2, err := http.NewRequest("DELETE", "/users/mrobock", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	r2 := httptest.NewRecorder()
+	handler = http.HandlerFunc(DeleteUserHandler)
+	handler.ServeHTTP(r2, req2)
+	if status := r2.Code; status != http.StatusNoContent {
+		t.Errorf("Expected status code %v, instead got %v", http.StatusNoContent, status)
+	}
+}

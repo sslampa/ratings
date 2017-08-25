@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"regexp"
 
 	"github.com/sslampa/ratings/server/models"
 )
@@ -37,4 +38,19 @@ func PostUserHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(u)
+}
+
+// DeleteUserHandler deletes user
+func DeleteUserHandler(w http.ResponseWriter, r *http.Request) {
+	un := r.URL.Path
+	re := regexp.MustCompile("^.*/users/([0-9a-zA-z]+)")
+	str := re.FindStringSubmatch(un)
+
+	err := models.DeleteUser("username", str[1])
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
 }
