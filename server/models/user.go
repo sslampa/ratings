@@ -75,6 +75,26 @@ func PostUser(un string) (User, error) {
 	return u, nil
 }
 
+// DeleteUser deletes the given user
+func DeleteUser(c, v string) error {
+	var deleteQuery string
+	switch c {
+	case "username":
+		deleteQuery = "DELETE FROM users WHERE username = $1"
+	case "id":
+		deleteQuery = "DELETE FROM users WHERE id = $1"
+	default:
+		return errors.New("Entered incorrect value for query case")
+	}
+
+	_, err := db.Exec(deleteQuery, v)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func seedUsers() {
 	u1 := User{Username: "sslampa"}
 	u2 := User{Username: "tomanistor"}
