@@ -87,6 +87,53 @@ func TestUserPost(t *testing.T) {
 
 }
 
+func TestUserDelete(t *testing.T) {
+	expect, _ := PostUser("mrobock")
+
+	err := DeleteUser("username", expect.Username)
+	if err != nil {
+		t.Errorf("Expected user to be found in db before deletion")
+	}
+
+	_, err = GetUser("username", expect.Username)
+	if err == nil {
+		t.Errorf("Expected user to not be found in db after deletion")
+	}
+
+	expect, _ = PostUser("mrobock")
+
+	err = DeleteUser("id", expect.ID)
+	if err != nil {
+		t.Errorf("Expected user to be found in db before deletion")
+	}
+
+	_, err = GetUser("id", expect.ID)
+	if err == nil {
+		t.Errorf("Expected user to not be found in db after deletion")
+	}
+
+	expect, _ = PostUser("mrobock")
+
+	err = DeleteUser("wrongInput", expect.Username)
+	if err == nil {
+		t.Errorf("Expected an error to be thrown for incorrect input value")
+	}
+
+	expect, _ = PostUser("mrobock")
+
+	err = DeleteUser("username", "wrongInput")
+	if err == nil {
+		t.Errorf("Expected an error to be thrown for incorrect input value")
+	}
+
+	expect, _ = PostUser("mrobock")
+
+	err = DeleteUser("id", "wrongInput")
+	if err == nil {
+		t.Errorf("Expected an error to be thrown for incorrect input value")
+	}
+}
+
 func userComp(t *testing.T, expected, actual User) {
 	if expected.ID != actual.ID {
 		t.Errorf("Expected id %v to equal %v", actual.ID, expected.ID)
