@@ -99,20 +99,34 @@ func TestDeleteUser(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	r1 := httptest.NewRecorder()
+	res1 := httptest.NewRecorder()
 	handler := http.HandlerFunc(PostUserHandler)
 
-	handler.ServeHTTP(r1, req1)
+	handler.ServeHTTP(res1, req1)
 
 	req2, err := http.NewRequest("DELETE", "/users/mrobock", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	r2 := httptest.NewRecorder()
+	res2 := httptest.NewRecorder()
 	handler = http.HandlerFunc(DeleteUserHandler)
-	handler.ServeHTTP(r2, req2)
-	if status := r2.Code; status != http.StatusNoContent {
+	handler.ServeHTTP(res2, req2)
+	if status := res2.Code; status != http.StatusNoContent {
 		t.Errorf("Expected status code %v, instead got %v", http.StatusNoContent, status)
+	}
+}
+
+func TestDeleteUserIncorrectUsername(t *testing.T) {
+	res := httptest.NewRecorder()
+	req, err := http.NewRequest("DELETE", "/users/incorrectUsername", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	handler := http.HandlerFunc(DeleteUserHandler)
+	handler.ServeHTTP(res, req)
+	if status := res.Code; status != http.StatusBadRequest {
+		t.Errorf("Expected status code %v, instead got %v", http.StatusBadRequest, status)
 	}
 }
