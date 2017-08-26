@@ -80,16 +80,25 @@ func DeleteUser(c, v string) error {
 	var deleteQuery string
 	switch c {
 	case "username":
-		deleteQuery = "DELETE FROM users WHERE username = $1"
+		deleteQuery = "DELETE FROM users WHERE username = $1 RETURNING id"
 	case "id":
-		deleteQuery = "DELETE FROM users WHERE id = $1"
+		deleteQuery = "DELETE FROM users WHERE id = $1 RETURNING id"
 	default:
 		return errors.New("Entered incorrect value for query case")
 	}
 
-	_, err := db.Exec(deleteQuery, v)
+	result, err := db.Exec(deleteQuery, v)
 	if err != nil {
 		return err
+	}
+
+	rows, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rows != 1 {
+		return fmt.Errorf("No record found with %v %v", c, v)
 	}
 
 	return nil

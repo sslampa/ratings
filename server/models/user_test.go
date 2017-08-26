@@ -121,10 +121,17 @@ func TestUserDelete(t *testing.T) {
 
 	expect, _ = PostUser("mrobock")
 
-	err = DeleteUser("id", "wrongInput")
+	err = DeleteUser("username", "wrongInput")
 	if err == nil {
 		t.Errorf("Expected an error to be thrown for incorrect input value")
 	}
+
+	// expect, _ = PostUser("mrobock")
+	//
+	// err = DeleteUser("id", "wrongInput")
+	// if err == nil {
+	// 	t.Erro
+	// }
 }
 
 func userComp(t *testing.T, expected, actual User) {
