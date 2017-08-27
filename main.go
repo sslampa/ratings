@@ -13,9 +13,9 @@ import (
 
 func main() {
 	port := flags()
-	http.HandleFunc("/users/add", handlers.PostUserHandler)
-	// http.HandleFunc("/users/", handlers.UserRoute)
 	http.HandleFunc("/users", handlers.UsersHandler)
+	http.HandleFunc("/users/add", handlers.PostUserHandler)
+	http.HandleFunc("/users/", handlers.UserRoute)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Hello World")
 	})
