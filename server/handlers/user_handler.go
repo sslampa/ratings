@@ -29,7 +29,7 @@ func UserHandler(w http.ResponseWriter, r *http.Request) {
 
 	user, err := models.GetUser("username", str[1])
 	if err != nil {
-		log.Fatal(err)
+		w.WriteHeader(http.StatusNotFound)
 	}
 
 	w.WriteHeader(http.StatusOK)

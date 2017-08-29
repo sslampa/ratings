@@ -130,3 +130,31 @@ func TestDeleteUserIncorrectUsername(t *testing.T) {
 		t.Errorf("Expected status code %v, instead got %v", http.StatusBadRequest, status)
 	}
 }
+
+func TestGetUser(t *testing.T) {
+	res := httptest.NewRecorder()
+	req, err := http.NewRequest("GET", "/users/sslampa", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	handler := http.HandlerFunc(UserHandler)
+	handler.ServeHTTP(res, req)
+	if status := res.Code; status != http.StatusOK {
+		t.Errorf("Expected status code %v, instead got %v", http.StatusBadRequest, status)
+	}
+}
+
+func TestGetUserIncorrect(t *testing.T) {
+	res := httptest.NewRecorder()
+	req, err := http.NewRequest("GET", "/users/incorrectUser", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	handler := http.HandlerFunc(UserHandler)
+	handler.ServeHTTP(res, req)
+	if status := res.Code; status != http.StatusNotFound {
+		t.Errorf("Expected status code %v, instead got %v", http.StatusNotFound, status)
+	}
+}
