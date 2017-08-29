@@ -7,19 +7,15 @@ import (
 // UserRoute routes to correct handler
 func UserRoute(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
-	case "POST":
-		PostUserHandler(w, r)
-		return
 	case "DELETE":
 		DeleteUserHandler(w, r)
 		return
+	case "POST":
+		PostUserHandler(w, r)
+		return
+	case "GET":
+		UserHandler(w, r)
 	}
 
-	// re := regexp.MustCompile("^.*/users/$")
-	// if re.MatchString(r.URL.Path) {
-	//   return UsersHandler
-	// }
-
-	UsersHandler(w, r)
 	return
 }

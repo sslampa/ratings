@@ -21,6 +21,22 @@ func UsersHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(users)
 }
 
+// UserHandler returns handler
+func UserHandler(w http.ResponseWriter, r *http.Request) {
+	un := r.URL.Path
+	re := regexp.MustCompile("^.*/users/([0-9a-zA-z]+)")
+	str := re.FindStringSubmatch(un)
+
+	user, err := models.GetUser("username", str[1])
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(user)
+}
+
 // PostUserHandler returns handler
 func PostUserHandler(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("username")

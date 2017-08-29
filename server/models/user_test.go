@@ -84,7 +84,6 @@ func TestUserPost(t *testing.T) {
 	if err == nil {
 		t.Errorf("Expected username %v to not equal %v", user.Username, expect.Username)
 	}
-
 }
 
 func TestUserDelete(t *testing.T) {

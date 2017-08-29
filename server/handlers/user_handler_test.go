@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"database/sql"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -9,8 +8,6 @@ import (
 
 	"github.com/sslampa/ratings/server/models"
 )
-
-var db *sql.DB
 
 func init() {
 	models.Initialize("ratings_app_test")
@@ -128,5 +125,33 @@ func TestDeleteUserIncorrectUsername(t *testing.T) {
 	handler.ServeHTTP(res, req)
 	if status := res.Code; status != http.StatusBadRequest {
 		t.Errorf("Expected status code %v, instead got %v", http.StatusBadRequest, status)
+	}
+}
+
+func TestGetUser(t *testing.T) {
+	res := httptest.NewRecorder()
+	req, err := http.NewRequest("GET", "/users/sslampa", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	handler := http.HandlerFunc(UserHandler)
+	handler.ServeHTTP(res, req)
+	if status := res.Code; status != http.StatusOK {
+		t.Errorf("Expected status code %v, instead got %v", http.StatusBadRequest, status)
+	}
+}
+
+func TestGetUserIncorrect(t *testing.T) {
+	res := httptest.NewRecorder()
+	req, err := http.NewRequest("GET", "/users/incorrectUser", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	handler := http.HandlerFunc(UserHandler)
+	handler.ServeHTTP(res, req)
+	if status := res.Code; status != http.StatusNotFound {
+		t.Errorf("Expected status code %v, instead got %v", http.StatusNotFound, status)
 	}
 }
