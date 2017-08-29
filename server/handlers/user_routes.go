@@ -10,15 +10,12 @@ func UserRoute(w http.ResponseWriter, r *http.Request) {
 	case "DELETE":
 		DeleteUserHandler(w, r)
 		return
+	case "POST":
+		PostUserHandler(w, r)
+		return
 	case "GET":
 		UserHandler(w, r)
-		return
 	}
-
-	// re := regexp.MustCompile("^.*/users/$")
-	// if re.MatchString(r.URL.Path) {
-	//   return UsersHandler
-	// }
 
 	return
 }
