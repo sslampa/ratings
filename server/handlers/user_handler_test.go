@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"database/sql"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -9,8 +8,6 @@ import (
 
 	"github.com/sslampa/ratings/server/models"
 )
-
-var db *sql.DB
 
 func init() {
 	models.Initialize("ratings_app_test")
