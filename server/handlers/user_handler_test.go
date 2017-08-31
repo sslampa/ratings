@@ -6,6 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/gorilla/mux"
 	"github.com/sslampa/ratings/server/models"
 )
 
@@ -37,7 +38,7 @@ func TestGetUsers(t *testing.T) {
 }
 
 func TestPostUser(t *testing.T) {
-	req, err := http.NewRequest("POST", "/users/add?username=melky", nil)
+	req, err := http.NewRequest("POST", "/users?username=melky", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -59,7 +60,7 @@ func TestPostUser(t *testing.T) {
 }
 
 func TestPostUsernameEmpty(t *testing.T) {
-	req, err := http.NewRequest("POST", "/users/add?username=", nil)
+	req, err := http.NewRequest("POST", "/users?username=", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -75,7 +76,7 @@ func TestPostUsernameEmpty(t *testing.T) {
 }
 
 func TestPostUsernameSame(t *testing.T) {
-	req, err := http.NewRequest("POST", "/users/add?username=sslampa", nil)
+	req, err := http.NewRequest("POST", "/users?username=sslampa", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -91,7 +92,7 @@ func TestPostUsernameSame(t *testing.T) {
 }
 
 func TestDeleteUser(t *testing.T) {
-	req1, err := http.NewRequest("POST", "/users/add?username=mrobock", nil)
+	req1, err := http.NewRequest("POST", "/users?username=mrobock", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -135,8 +136,10 @@ func TestGetUser(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	handler := http.HandlerFunc(UserHandler)
-	handler.ServeHTTP(res, req)
+	r := mux.NewRouter()
+	r.HandleFunc("/users/{username}", UserHandler)
+	r.ServeHTTP(res, req)
+
 	if status := res.Code; status != http.StatusOK {
 		t.Errorf("Expected status code %v, instead got %v", http.StatusBadRequest, status)
 	}
@@ -149,8 +152,10 @@ func TestGetUserIncorrect(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	handler := http.HandlerFunc(UserHandler)
-	handler.ServeHTTP(res, req)
+	r := mux.NewRouter()
+	r.HandleFunc("/users/{username}", UserHandler)
+	r.ServeHTTP(res, req)
+
 	if status := res.Code; status != http.StatusNotFound {
 		t.Errorf("Expected status code %v, instead got %v", http.StatusNotFound, status)
 	}

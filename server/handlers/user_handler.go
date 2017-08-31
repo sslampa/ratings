@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"regexp"
 
+	"github.com/gorilla/mux"
 	"github.com/sslampa/ratings/server/models"
 )
 
@@ -23,18 +23,28 @@ func UsersHandler(w http.ResponseWriter, r *http.Request) {
 
 // UserHandler returns handler
 func UserHandler(w http.ResponseWriter, r *http.Request) {
-	un := r.URL.Path
-	re := regexp.MustCompile("^.*/users/([0-9a-zA-z]+)")
-	str := re.FindStringSubmatch(un)
-
-	user, err := models.GetUser("username", str[1])
+	vars := mux.Vars(r)
+	user, err := models.GetUser("username", vars["username"])
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
+		return
 	}
 
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(user)
+}
+
+// DeleteUserHandler deletes user
+func DeleteUserHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	err := models.DeleteUser("username", vars["username"])
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
 }
 
 // PostUserHandler returns handler
@@ -54,19 +64,4 @@ func PostUserHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(u)
-}
-
-// DeleteUserHandler deletes user
-func DeleteUserHandler(w http.ResponseWriter, r *http.Request) {
-	un := r.URL.Path
-	re := regexp.MustCompile("^.*/users/([0-9a-zA-z]+)")
-	str := re.FindStringSubmatch(un)
-
-	err := models.DeleteUser("username", str[1])
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
-	w.WriteHeader(http.StatusNoContent)
 }
