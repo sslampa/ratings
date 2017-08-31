@@ -16,6 +16,7 @@ func main() {
 
 	r := mux.NewRouter()
 	r.HandleFunc("/users/{username}", handlers.UserHandler).Methods("GET")
+	r.HandleFunc("/users/{username}", handlers.UpdateUserHandler).Methods("PUT")
 	r.HandleFunc("/users/{username}", handlers.DeleteUserHandler).Methods("DELETE")
 	r.HandleFunc("/users", handlers.PostUserHandler).Methods("POST")
 	r.HandleFunc("/users", handlers.UsersHandler).Methods("GET")
