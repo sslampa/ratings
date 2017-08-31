@@ -163,7 +163,7 @@ func TestGetUserIncorrect(t *testing.T) {
 
 func TestUpdateUser(t *testing.T) {
 	res := httptest.NewRecorder()
-	req, err := http.NewRequest("PATCH", "/users/sslampa?username=stfed", nil)
+	req, err := http.NewRequest("PUT", "/users/sslampa?username=stfed", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -179,7 +179,11 @@ func TestUpdateUser(t *testing.T) {
 	user := models.User{}
 	json.NewDecoder(res.Body).Decode(&user)
 	if user.ID != "1" {
-		t.Errorf("Expected length to be 3")
+		t.Errorf("Expected user ID to be 1")
+	}
+
+	if user.Username != "stfed" {
+		t.Errorf("Expected user username to be stfed")
 	}
 }
 
