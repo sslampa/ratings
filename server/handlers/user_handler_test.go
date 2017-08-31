@@ -160,3 +160,41 @@ func TestGetUserIncorrect(t *testing.T) {
 		t.Errorf("Expected status code %v, instead got %v", http.StatusNotFound, status)
 	}
 }
+
+func TestUpdateUser(t *testing.T) {
+	res := httptest.NewRecorder()
+	req, err := http.NewRequest("PATCH", "/users/sslampa?username=stfed", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	r := mux.NewRouter()
+	r.HandleFunc("/users/{username}", UpdateUserHandler)
+	r.ServeHTTP(res, req)
+
+	if status := res.Code; status != http.StatusOK {
+		t.Errorf("Expected status code %v, instead got %v", http.StatusOK, status)
+	}
+
+	user := models.User{}
+	json.NewDecoder(res.Body).Decode(&user)
+	if user.ID != "1" {
+		t.Errorf("Expected length to be 3")
+	}
+}
+
+func TestUpdateUserFail(t *testing.T) {
+	res := httptest.NewRecorder()
+	req, err := http.NewRequest("PUT", "/users/incorrectUser", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	r := mux.NewRouter()
+	r.HandleFunc("/users/{username}", UpdateUserHandler)
+	r.ServeHTTP(res, req)
+
+	if status := res.Code; status != http.StatusBadRequest {
+		t.Errorf("Expected status code %v, instead got %v", http.StatusBadRequest, status)
+	}
+}
