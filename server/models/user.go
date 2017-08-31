@@ -104,6 +104,25 @@ func DeleteUser(c, v string) error {
 	return nil
 }
 
+// UpdateUser updates the given user
+func UpdateUser(c, v, nv string) (User, error) {
+	var updateQuery string
+	switch c {
+	case "username":
+		updateQuery = "UPDATE users SET username = $1 WHERE username = $2 RETURNING *"
+	case "id":
+		updateQuery = "UPDATE users SET username = $1 WHERE id = $2 RETURNING *"
+	}
+
+	u := User{}
+	err := db.QueryRow(updateQuery, nv, v).Scan(&u.ID, &u.Username)
+	if err != nil {
+		return u, err
+	}
+
+	return u, nil
+}
+
 func seedUsers() {
 	u1 := User{Username: "sslampa"}
 	u2 := User{Username: "tomanistor"}

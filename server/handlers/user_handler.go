@@ -65,3 +65,18 @@ func PostUserHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(u)
 }
+
+// UpdateUserHandler returns handler
+func UpdateUserHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	nu := r.FormValue("username")
+	u, err := models.UpdateUser("username", vars["username"], nu)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(u)
+}

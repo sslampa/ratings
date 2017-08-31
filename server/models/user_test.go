@@ -133,6 +133,44 @@ func TestUserDelete(t *testing.T) {
 	}
 }
 
+func TestUserUpdateUsername(t *testing.T) {
+	expect := User{"3", "sucrosm"}
+
+	actual, err := UpdateUser("username", "suzmas", "sucrosm")
+	if err != nil {
+		t.Errorf("Expected no error")
+	}
+
+	userComp(t, expect, actual)
+}
+
+func TestUserUpdateID(t *testing.T) {
+	expect := User{"2", "tomas"}
+
+	actual, err := UpdateUser("id", "2", "tomas")
+	if err != nil {
+		t.Errorf("Expected no error")
+	}
+
+	userComp(t, expect, actual)
+}
+
+func TestUserUpdateIncorrectUsername(t *testing.T) {
+	_, err := UpdateUser("username", "incorrectUser", "thisShouldNotBeHere")
+	if err == nil {
+		t.Errorf("Expected incorrectUser to not update")
+	}
+
+	_, err = UpdateUser("id", "0", "thisShouldNotBeHere")
+	if err == nil {
+		t.Errorf("Expected 0 to not update")
+	}
+}
+
+func TestUserUpdateIncorrect(t *testing.T) {
+
+}
+
 func userComp(t *testing.T, expected, actual User) {
 	if expected.ID != actual.ID {
 		t.Errorf("Expected id %v to equal %v", actual.ID, expected.ID)
