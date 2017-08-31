@@ -2,10 +2,10 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
 	"github.com/sslampa/ratings/server/handlers"
 	"github.com/sslampa/ratings/server/models"
@@ -13,14 +13,15 @@ import (
 
 func main() {
 	port := flags()
-	http.HandleFunc("/users", handlers.UsersHandler)
-	http.HandleFunc("/users/", handlers.UserRoute)
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello World")
-	})
+
+	r := mux.NewRouter()
+	r.HandleFunc("/users/{username}", handlers.UserHandler).Methods("GET")
+	r.HandleFunc("/users/{username}", handlers.DeleteUserHandler).Methods("DELETE")
+	r.HandleFunc("/users", handlers.PostUserHandler).Methods("POST")
+	r.HandleFunc("/users", handlers.UsersHandler).Methods("GET")
 
 	log.Printf("Serving on HTTP port: %s\n", *port)
-	err := http.ListenAndServe(":"+*port, nil)
+	err := http.ListenAndServe(":"+*port, r)
 	if err != nil {
 		log.Fatal("Listen and Serve: ", err)
 	}
