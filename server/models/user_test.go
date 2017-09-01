@@ -42,7 +42,7 @@ func TestAllUsers(t *testing.T) {
 }
 
 func TestUserID(t *testing.T) {
-	expect := User{"1", "sslampa"}
+	expect := User{ID: "1", Username: "sslampa"}
 	user, err := GetUser("id", "1")
 	if err != nil {
 		log.Fatal(err)
@@ -62,7 +62,7 @@ func TestUserID(t *testing.T) {
 }
 
 func TestUserUsername(t *testing.T) {
-	expect := User{"1", "sslampa"}
+	expect := User{ID: "1", Username: "sslampa"}
 	user, err := GetUser("username", "sslampa")
 	if err != nil {
 		log.Fatal(err)
@@ -72,7 +72,7 @@ func TestUserUsername(t *testing.T) {
 }
 
 func TestUserPost(t *testing.T) {
-	expect := User{"4", "cmfasulo"}
+	expect := User{ID: "4", Username: "cmfasulo"}
 	user, err := PostUser("cmfasulo")
 	if err != nil {
 		t.Errorf("Expected query to return a user")
@@ -134,7 +134,7 @@ func TestUserDelete(t *testing.T) {
 }
 
 func TestUserUpdateUsername(t *testing.T) {
-	expect := User{"3", "sucrosm"}
+	expect := User{ID: "3", Username: "sucrosm"}
 
 	actual, err := UpdateUser("username", "suzmas", "sucrosm")
 	if err != nil {
@@ -145,7 +145,7 @@ func TestUserUpdateUsername(t *testing.T) {
 }
 
 func TestUserUpdateID(t *testing.T) {
-	expect := User{"2", "tomas"}
+	expect := User{ID: "2", Username: "tomas"}
 
 	actual, err := UpdateUser("id", "2", "tomas")
 	if err != nil {
@@ -167,10 +167,36 @@ func TestUserUpdateIncorrectUsername(t *testing.T) {
 	}
 }
 
-func TestUserUpdateIncorrect(t *testing.T) {
+func TestUserShowsCollection(t *testing.T) {
+	es, err := GetShows("1")
+	if err != nil {
+		log.Fatal(err)
+	}
 
+	u, err := GetUser("id", "1")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	actual, err := GetUserShows(u.Username)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if actual.ID != u.ID {
+		t.Errorf("Expected %v to equal %v", actual.ID, u.ID)
+	}
+
+	if len(actual.Shows) != len(es) {
+		t.Errorf("Expected %v to equal %v", len(actual.Shows), len(es))
+	}
 }
 
+/*
+** PRIVATE METHODS
+**
+**
+ */
 func userComp(t *testing.T, expected, actual User) {
 	if expected.ID != actual.ID {
 		t.Errorf("Expected id %v to equal %v", actual.ID, expected.ID)

@@ -11,6 +11,7 @@ import (
 type User struct {
 	ID       string `json:"id"`
 	Username string `json:"username"`
+	Shows    []Show `json:"shows,omitempty"`
 }
 
 // GetUsers returns all users
@@ -53,6 +54,22 @@ func GetUser(c, v string) (User, error) {
 		return u, fmt.Errorf("No user found with %v %v", c, v)
 	}
 
+	return u, nil
+}
+
+// GetUserShows gets the collection of shows for user
+func GetUserShows(un string) (User, error) {
+	u, err := GetUser("username", un)
+	if err != nil {
+		return u, err
+	}
+
+	shows, err := GetShows(u.ID)
+	if err != nil {
+		return u, err
+	}
+
+	u.Shows = shows
 	return u, nil
 }
 
