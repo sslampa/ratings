@@ -36,12 +36,14 @@ func Initialize(dbName string) {
 func Seed() {
 	dropUserTable()
 	createUserTable()
+	createShowsTable()
 	seedUsers()
 }
 
 // Create creates all tables
 func Create() {
 	createUserTable()
+	createShowsTable()
 }
 
 // Drop drops all tables
