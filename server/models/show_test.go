@@ -30,4 +30,13 @@ func TestGetShowsID(t *testing.T) {
 	if len(shows) != 2 {
 		t.Error("Expected length of shows to be 2")
 	}
+
+	shows, err = GetShows("1000000")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if len(shows) > 0 {
+		t.Error("Expected length of shows to be 0")
+	}
 }
