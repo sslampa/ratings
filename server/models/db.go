@@ -34,17 +34,25 @@ func Initialize(dbName string) {
 
 // Seed seeds all tables
 func Seed() {
+	dropShowsTable()
 	dropUserTable()
 	createUserTable()
+	createShowsTable()
 	seedUsers()
+	seedShows()
+	fmt.Println("Data seeded")
 }
 
 // Create creates all tables
 func Create() {
 	createUserTable()
+	createShowsTable()
+	fmt.Println("Tables created")
 }
 
 // Drop drops all tables
 func Drop() {
+	dropShowsTable()
 	dropUserTable()
+	fmt.Println("Tables dropped")
 }

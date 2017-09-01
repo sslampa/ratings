@@ -11,6 +11,7 @@ import (
 type User struct {
 	ID       string `json:"id"`
 	Username string `json:"username"`
+	Shows    []Show `json:"shows,omitempty"`
 }
 
 // GetUsers returns all users
@@ -53,6 +54,22 @@ func GetUser(c, v string) (User, error) {
 		return u, fmt.Errorf("No user found with %v %v", c, v)
 	}
 
+	return u, nil
+}
+
+// GetUserShows gets the collection of shows for user
+func GetUserShows(un string) (User, error) {
+	u, err := GetUser("username", un)
+	if err != nil {
+		return u, err
+	}
+
+	shows, err := GetShows(u.ID)
+	if err != nil {
+		return u, err
+	}
+
+	u.Shows = shows
 	return u, nil
 }
 
@@ -135,7 +152,6 @@ func seedUsers() {
 			log.Fatal(err)
 		}
 	}
-	fmt.Println("User seed created")
 }
 
 func createUserTable() {
@@ -146,7 +162,6 @@ func createUserTable() {
 	if _, err := db.Exec(tableQuery); err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("User table created")
 }
 
 func dropUserTable() {
@@ -154,5 +169,4 @@ func dropUserTable() {
 	if _, err := db.Exec(dropQuery); err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("User table dropped")
 }

@@ -15,6 +15,7 @@ func main() {
 	port := flags()
 
 	r := mux.NewRouter()
+	r.HandleFunc("/users/{username}/shows", handlers.UserShowsHandler)
 	r.HandleFunc("/users/{username}", handlers.UserHandler).Methods("GET")
 	r.HandleFunc("/users/{username}", handlers.UpdateUserHandler).Methods("PUT")
 	r.HandleFunc("/users/{username}", handlers.DeleteUserHandler).Methods("DELETE")
