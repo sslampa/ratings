@@ -39,6 +39,7 @@ func Seed() {
 	createUserTable()
 	createShowsTable()
 	seedUsers()
+	seedShows()
 }
 
 // Create creates all tables
