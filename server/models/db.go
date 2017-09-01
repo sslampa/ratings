@@ -34,8 +34,8 @@ func Initialize(dbName string) {
 
 // Seed seeds all tables
 func Seed() {
-	dropUserTable()
 	dropShowsTable()
+	dropUserTable()
 	createUserTable()
 	createShowsTable()
 	seedUsers()
@@ -52,7 +52,7 @@ func Create() {
 
 // Drop drops all tables
 func Drop() {
-	dropUserTable()
 	dropShowsTable()
+	dropUserTable()
 	fmt.Println("Tables dropped")
 }
