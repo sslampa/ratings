@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -200,5 +201,21 @@ func TestUpdateUserFail(t *testing.T) {
 
 	if status := res.Code; status != http.StatusBadRequest {
 		t.Errorf("Expected status code %v, instead got %v", http.StatusBadRequest, status)
+	}
+}
+
+func TestUserShows(t *testing.T) {
+	res := httptest.NewRecorder()
+	req, err := http.NewRequest("GET", "/users/sslampa/shows", nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	r := mux.NewRouter()
+	r.HandleFunc("/users/{username}/shows", UserShowsHandler)
+	r.ServeHTTP(res, req)
+
+	if status := res.Code; status != http.StatusOK {
+		t.Errorf("Expected status code %v, instead got %v", http.StatusOK, status)
 	}
 }

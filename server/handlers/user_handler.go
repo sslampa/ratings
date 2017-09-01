@@ -35,6 +35,19 @@ func UserHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(user)
 }
 
+// UserShowsHandler returns handler
+func UserShowsHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	user, err := models.GetUserShows(vars["username"])
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(user)
+}
+
 // DeleteUserHandler deletes user
 func DeleteUserHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
