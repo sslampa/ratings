@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"log"
 )
 
@@ -11,6 +10,26 @@ type Show struct {
 	Name        string
 	Year        string
 	Description string
+}
+
+// GetShows returns all shows
+func GetShows() ([]Show, error) {
+	var shows = make([]Show, 0)
+	const query = `SELECT * FROM shows`
+	rows, err := db.Query(query)
+	if err != nil {
+		return shows, err
+	}
+
+	for rows.Next() {
+		show := Show{}
+		err = rows.Scan(&show.ID, &show.Name, &show.Year, &show.Description)
+		if err != nil {
+			return shows, err
+		}
+		shows = append(shows, show)
+	}
+	return shows, nil
 }
 
 func createShowsTable() {
@@ -24,7 +43,6 @@ func createShowsTable() {
 	if _, err := db.Exec(query); err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("Shows table created")
 }
 
 func dropShowsTable() {
@@ -32,7 +50,6 @@ func dropShowsTable() {
 	if _, err := db.Exec(query); err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("Shows table dropped")
 }
 
 func seedShows() {

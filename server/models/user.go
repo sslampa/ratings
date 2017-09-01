@@ -135,7 +135,6 @@ func seedUsers() {
 			log.Fatal(err)
 		}
 	}
-	fmt.Println("User seed created")
 }
 
 func createUserTable() {
@@ -146,7 +145,6 @@ func createUserTable() {
 	if _, err := db.Exec(tableQuery); err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("User table created")
 }
 
 func dropUserTable() {
@@ -154,5 +152,4 @@ func dropUserTable() {
 	if _, err := db.Exec(dropQuery); err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("User table dropped")
 }
